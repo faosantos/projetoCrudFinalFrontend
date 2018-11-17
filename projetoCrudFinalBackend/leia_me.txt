@@ -1,0 +1,3595 @@
+link do artigo:
+https://reactnativecode.com/insert-update-display-delete-crud-operations/
+
+Reagir Inserir Inserção de Atualização Nativa Excluir Operações CRUD MySQL DB
+ admin 13 de dezembro de 2017 Reagir Nativo
+Este tutorial é o tutorial totalmente avançado em reagir nativo, porque neste tutorial, vamos implementar operações CRUD em reagir aplicativos iOS Android nativos. As operações CRUD consistem em quatro tipos principais de funções: Adicionar, Editar (Modificar), Excluir e Visualizar. Então vamos criar um aplicativo nativo de resposta com Insert Update Display Apagar operações CRUD do banco de dados MySQL usando PHP.
+
+O que estamos fazendo neste projeto:
+
+Estamos criando um aplicativo nativo de  reação com a biblioteca de navegação por reação, porque sem a navegação de reação não podemos adicionar várias atividades em nosso projeto. Agora, inseriríamos registros de alunos no banco de dados MySQL on-line usando PHP de nosso aplicativo nativo de resposta. Depois disso, obteríamos todos esses registros em ListView na próxima atividade. Agora, abriríamos o registro selecionado na próxima atividade e preencheríamos automaticamente cada dado em TextInput. Também damos a opção de excluir os dados atuais selecionados. Então vamos começar ??.
+
+Estrutura do Arquivo de Descrição do Projeto:
+
+Arquivos PHP neste projeto:
+
+DBConfig.php
+InsertStudentData.php
+ShowAllStudentsList.php
+UpdateStudentRecord.php
+DeleteStudentRecord.php
+Classes de atividades neste projeto criadas no arquivo App.js
+
+Atividade principal
+ShowStudentListActivity
+EditStudentRecordActivity
+Conteúdo deste projeto Insert Update Display Apagar Operações CRUD Do banco de dados MySQL em react native usando PHP:
+1. Crie um novo banco de dados MySQL no seu servidor de hospedagem online.
+
+2. Crie uma tabela nomeada como  StudentDetailsTable com 5 colunas student_id ,  student_name ,  student_class ,  student_phone_number e student_email . Agora faríamos o student_id como chave primária com incremento automático . Veja a imagem abaixo para mais detalhes. Esta seria nossa tabela principal e nós executaríamos todas as operações CRUD nesta tabela a partir do nosso banco de dados MySQL.
+
+
+
+
+ 3. Crie 5 arquivos de script PHP para receber e inserir, exibir, atualizar e excluir dados do banco de dados MySQL do aplicativo React Native:
+Gostaríamos de fazer 5 arquivos PHP nomeados como  DBConfig.php ,  InsertStudentData.php ,  ShowAllStudentsList.php ,  UpdateStudentRecord.php e  DeleteStudentRecord.php . Você precisa fazer o upload de todos esses arquivos para o seu servidor de hospedagem.
+
+DBConfig.php : Este arquivo consiste em toda a configuração de conexão do banco de dados MySQL, como nome do host do banco de dados MySQL, nome do banco de dados MySQL, nome de usuário do banco de dados MySQL, senha do banco de dados MySQL.
+InsertStudentData.php : Este arquivo receberia os dados enviados do aplicativo nativo reagente e inseriria esses dados na tabela MySQL.
+ShowAllStudentsList.php :  Este arquivo converteria todos os dados atuais existentes do banco de dados MySQL para o formato JSON.
+UpdateStudentRecord.php : esse arquivo atualizaria o registro aberto existente no aplicativo.
+DeleteStudentRecord.php : Este arquivo excluiria o registro aberto existente no aplicativo nativo de resposta.
+1. Código para o arquivo DBConfig.php.php:
+
+
+<?php
+
+//Define your host here.
+$HostName = "localhost";
+
+//Define your database name here.
+$DatabaseName = "id2070055_reactnativedb";
+
+//Define your database username here.
+$HostUser = "id2070055_reactnativedb_user";
+
+//Define your database password here.
+$HostPass = "1234567890";
+
+?>
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+<?php
+ 
+//Define your host here.
+$HostName = "localhost";
+ 
+//Define your database name here.
+$DatabaseName = "id2070055_reactnativedb";
+ 
+//Define your database username here.
+$HostUser = "id2070055_reactnativedb_user";
+ 
+//Define your database password here.
+$HostPass = "1234567890";
+ 
+?>
+2. Código para o arquivo InsertStudentData.php:
+
+
+<?php
+ 
+// Importing DBConfig.php file.
+include 'DBConfig.php';
+ 
+// Connecting to MySQL Database.
+ $con = mysqli_connect($HostName,$HostUser,$HostPass,$DatabaseName);
+ 
+ // Getting the received JSON into $json variable.
+ $json = file_get_contents('php://input');
+ 
+ // decoding the received JSON and store into $obj variable.
+ $obj = json_decode($json,true);
+ 
+ // Populate Student name from JSON $obj array and store into $S_Name.
+ $S_Name = $obj['student_name'];
+ 
+ // Populate Student Class from JSON $obj array and store into $S_Class.
+ $S_Class = $obj['student_class'];
+ 
+ // Populate Student Phone Number from JSON $obj array and store into $S_Phone_Number.
+ $S_Phone_Number = $obj['student_phone_number'];
+ 
+ // Populate Email from JSON $obj array and store into $S_Email.
+ $S_Email = $obj['student_email'];
+ 
+ // Creating SQL query and insert the record into MySQL database table.
+ $Sql_Query = "insert into StudentDetailsTable (student_name,student_class,student_phone_number,student_email) values ('$S_Name','$S_Class','$S_Phone_Number','$S_Email')";
+ 
+ 
+ if(mysqli_query($con,$Sql_Query)){
+ 
+ // If the record inserted successfully then show the message.
+$MSG = 'Record Successfully Inserted Into MySQL Database.' ;
+ 
+// Converting the message into JSON format.
+$json = json_encode($MSG);
+ 
+// Echo the message.
+ echo $json ;
+ 
+ }
+ else{
+ 
+ echo 'Try Again';
+ 
+ }
+ mysqli_close($con);
+?>
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+<?php
+ 
+// Importing DBConfig.php file.
+include 'DBConfig.php';
+ 
+// Connecting to MySQL Database.
+ $con = mysqli_connect($HostName,$HostUser,$HostPass,$DatabaseName);
+ 
+ // Getting the received JSON into $json variable.
+ $json = file_get_contents('php://input');
+ 
+ // decoding the received JSON and store into $obj variable.
+ $obj = json_decode($json,true);
+ 
+ // Populate Student name from JSON $obj array and store into $S_Name.
+ $S_Name = $obj['student_name'];
+ 
+ // Populate Student Class from JSON $obj array and store into $S_Class.
+ $S_Class = $obj['student_class'];
+ 
+ // Populate Student Phone Number from JSON $obj array and store into $S_Phone_Number.
+ $S_Phone_Number = $obj['student_phone_number'];
+ 
+ // Populate Email from JSON $obj array and store into $S_Email.
+ $S_Email = $obj['student_email'];
+ 
+ // Creating SQL query and insert the record into MySQL database table.
+ $Sql_Query = "insert into StudentDetailsTable (student_name,student_class,student_phone_number,student_email) values ('$S_Name','$S_Class','$S_Phone_Number','$S_Email')";
+ 
+ 
+ if(mysqli_query($con,$Sql_Query)){
+ 
+ // If the record inserted successfully then show the message.
+$MSG = 'Record Successfully Inserted Into MySQL Database.' ;
+ 
+// Converting the message into JSON format.
+$json = json_encode($MSG);
+ 
+// Echo the message.
+ echo $json ;
+ 
+ }
+ else{
+ 
+ echo 'Try Again';
+ 
+ }
+ mysqli_close($con);
+?>
+3. Código para o arquivo ShowAllStudentsList.php:
+
+
+<?php
+include 'DBConfig.php';
+ 
+// Create connection
+$conn = new mysqli($HostName, $HostUser, $HostPass, $DatabaseName);
+ 
+if ($conn->connect_error) {
+ 
+ die("Connection failed: " . $conn->connect_error);
+} 
+ 
+// Creating SQL command to fetch all records from Table.
+$sql = "SELECT * FROM StudentDetailsTable";
+ 
+$result = $conn->query($sql);
+ 
+if ($result->num_rows >0) {
+ 
+ 
+ while($row[] = $result->fetch_assoc()) {
+ 
+ $item = $row;
+ 
+ $json = json_encode($item);
+ 
+ }
+ 
+} else {
+ echo "No Results Found.";
+}
+ echo $json;
+$conn->close();
+?>
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+<?php
+include 'DBConfig.php';
+ 
+// Create connection
+$conn = new mysqli($HostName, $HostUser, $HostPass, $DatabaseName);
+ 
+if ($conn->connect_error) {
+ 
+ die("Connection failed: " . $conn->connect_error);
+} 
+ 
+// Creating SQL command to fetch all records from Table.
+$sql = "SELECT * FROM StudentDetailsTable";
+ 
+$result = $conn->query($sql);
+ 
+if ($result->num_rows >0) {
+ 
+ 
+ while($row[] = $result->fetch_assoc()) {
+ 
+ $item = $row;
+ 
+ $json = json_encode($item);
+ 
+ }
+ 
+} else {
+ echo "No Results Found.";
+}
+ echo $json;
+$conn->close();
+?>
+4. Código para o arquivo UpdateStudentRecord.php:
+
+
+<?php
+ 
+// Importing DBConfig.php file.
+include 'DBConfig.php';
+ 
+// Connecting to MySQL Database.
+ $con = mysqli_connect($HostName,$HostUser,$HostPass,$DatabaseName);
+ 
+ // Getting the received JSON into $json variable.
+ $json = file_get_contents('php://input');
+ 
+ // decoding the received JSON and store into $obj variable.
+ $obj = json_decode($json,true);
+ 
+ // Populate Student ID from JSON $obj array and store into $S_Name.
+ $S_ID = $obj['student_id'];
+ 
+ // Populate Student name from JSON $obj array and store into $S_Name.
+ $S_Name = $obj['student_name'];
+ 
+ // Populate Student Class from JSON $obj array and store into $S_Class.
+ $S_Class = $obj['student_class'];
+ 
+ // Populate Student Phone Number from JSON $obj array and store into $S_Phone_Number.
+ $S_Phone_Number = $obj['student_phone_number'];
+ 
+ // Populate Email from JSON $obj array and store into $S_Email.
+ $S_Email = $obj['student_email'];
+ 
+ // Creating SQL query and insert the record into MySQL database table.
+ $Sql_Query = "UPDATE StudentDetailsTable SET student_name= '$S_Name', student_class = '$S_Class', student_phone_number = '$S_Phone_Number', student_email = '$S_Email' WHERE student_id = $S_ID";
+ 
+ if(mysqli_query($con,$Sql_Query)){
+ 
+ // If the record inserted successfully then show the message.
+$MSG = 'Record Successfully Inserted Into MySQL Database.' ;
+ 
+// Converting the message into JSON format.
+$json = json_encode($MSG);
+ 
+// Echo the message.
+ echo $json ;
+ 
+ }
+ else{
+ 
+ echo 'Try Again';
+ 
+ }
+ mysqli_close($con);
+?>
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+<?php
+ 
+// Importing DBConfig.php file.
+include 'DBConfig.php';
+ 
+// Connecting to MySQL Database.
+ $con = mysqli_connect($HostName,$HostUser,$HostPass,$DatabaseName);
+ 
+ // Getting the received JSON into $json variable.
+ $json = file_get_contents('php://input');
+ 
+ // decoding the received JSON and store into $obj variable.
+ $obj = json_decode($json,true);
+ 
+ // Populate Student ID from JSON $obj array and store into $S_Name.
+ $S_ID = $obj['student_id'];
+ 
+ // Populate Student name from JSON $obj array and store into $S_Name.
+ $S_Name = $obj['student_name'];
+ 
+ // Populate Student Class from JSON $obj array and store into $S_Class.
+ $S_Class = $obj['student_class'];
+ 
+ // Populate Student Phone Number from JSON $obj array and store into $S_Phone_Number.
+ $S_Phone_Number = $obj['student_phone_number'];
+ 
+ // Populate Email from JSON $obj array and store into $S_Email.
+ $S_Email = $obj['student_email'];
+ 
+ // Creating SQL query and insert the record into MySQL database table.
+ $Sql_Query = "UPDATE StudentDetailsTable SET student_name= '$S_Name', student_class = '$S_Class', student_phone_number = '$S_Phone_Number', student_email = '$S_Email' WHERE student_id = $S_ID";
+ 
+ if(mysqli_query($con,$Sql_Query)){
+ 
+ // If the record inserted successfully then show the message.
+$MSG = 'Record Successfully Inserted Into MySQL Database.' ;
+ 
+// Converting the message into JSON format.
+$json = json_encode($MSG);
+ 
+// Echo the message.
+ echo $json ;
+ 
+ }
+ else{
+ 
+ echo 'Try Again';
+ 
+ }
+ mysqli_close($con);
+?>
+5. Código para o arquivo DeleteStudentRecord.php:
+
+
+<?php
+ 
+// Importing DBConfig.php file.
+include 'DBConfig.php';
+ 
+// Connecting to MySQL Database.
+ $con = mysqli_connect($HostName,$HostUser,$HostPass,$DatabaseName);
+ 
+ // Getting the received JSON into $json variable.
+ $json = file_get_contents('php://input');
+ 
+ // decoding the received JSON and store into $obj variable.
+ $obj = json_decode($json,true);
+ 
+ // Populate Student ID from JSON $obj array and store into $S_ID.
+ $S_ID = $obj['student_id'];
+ 
+ // Creating SQL query and Updating the current record into MySQL database table.
+ $Sql_Query = "DELETE FROM StudentDetailsTable WHERE student_id = '$S_ID'" ;
+ 
+ 
+ if(mysqli_query($con,$Sql_Query)){
+ 
+ // If the record inserted successfully then show the message.
+$MSG = 'Record Deleted Successfully.' ;
+ 
+// Converting the message into JSON format.
+$json = json_encode($MSG);
+ 
+// Echo the message.
+ echo $json ;
+ 
+ }
+ else{
+ 
+ echo 'Try Again';
+ 
+ }
+ mysqli_close($con);
+?>
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+<?php
+ 
+// Importing DBConfig.php file.
+include 'DBConfig.php';
+ 
+// Connecting to MySQL Database.
+ $con = mysqli_connect($HostName,$HostUser,$HostPass,$DatabaseName);
+ 
+ // Getting the received JSON into $json variable.
+ $json = file_get_contents('php://input');
+ 
+ // decoding the received JSON and store into $obj variable.
+ $obj = json_decode($json,true);
+ 
+ // Populate Student ID from JSON $obj array and store into $S_ID.
+ $S_ID = $obj['student_id'];
+ 
+ // Creating SQL query and Updating the current record into MySQL database table.
+ $Sql_Query = "DELETE FROM StudentDetailsTable WHERE student_id = '$S_ID'" ;
+ 
+ 
+ if(mysqli_query($con,$Sql_Query)){
+ 
+ // If the record inserted successfully then show the message.
+$MSG = 'Record Deleted Successfully.' ;
+ 
+// Converting the message into JSON format.
+$json = json_encode($MSG);
+ 
+// Echo the message.
+ echo $json ;
+ 
+ }
+ else{
+ 
+ echo 'Try Again';
+ 
+ }
+ mysqli_close($con);
+?>
+4. Inicie um novo projeto nativo de resposta ou abra o arquivo App.js do projeto existente .
+
+5. Abra a pasta do seu projeto em Prompt de Comando / Terminal e instale  a biblioteca de navegação por reação . digitando  npm instalar - salvar reagir - navegação  de comando. Você pode ler meu tutorial para entender como a estrutura de atividades funcionaria.
+
+
+
+6. Importe os  componentes StyleSheet , View , Alert , TextInput , Button , Text , Platform , TouchableOpacity , ListView e ActivityIndicator em seu projeto.
+
+
+import React, { Component } from 'react';
+
+import { StyleSheet, View, Alert, TextInput, Button, Text, Platform, TouchableOpacity, ListView, ActivityIndicator } from 'react-native';
+1
+2
+3
+import React, { Component } from 'react';
+ 
+import { StyleSheet, View, Alert, TextInput, Button, Text, Platform, TouchableOpacity, ListView, ActivityIndicator } from 'react-native';
+7. Importe o  StackNavigator da  biblioteca react -navigation .
+
+
+import { StackNavigator } from 'react-navigation';
+1
+import { StackNavigator } from 'react-navigation';
+8. Crie uma classe nomeada como  MainActivity em seu projeto. Esta seria a sua primeira tela do aplicativo com o registro do usuário de.
+
+navigationOptions : Usado para definir o título da atividade exibido na barra de título da ação.
+
+construtor () : Criando 4 estados dentro do construtor () chamado como TextInput_Student_Name, TextInput_Student_Class, TextInput_Student_PhoneNumber, TextInput_Student_Email. Cada estado é usado para manter o valor inserido de TextInput.
+
+InsertStudentRecordsToServer () : Esta função deve executar a API fetch do nativo reagir () e enviar todo o valor inserido em TextInput para o servidor e após a inserção com sucesso, ele mostrará a mensagem de resposta proveniente do servidor na caixa de diálogo Alerta.
+
+GoTo_Show_StudentList_Activity_Function () : Nesta função, abriríamos a  ShowStudentListActivity como segunda atividade.
+
+
+class MainActivity extends Component {
+
+  static navigationOptions =
+  {
+     title: 'MainActivity',
+  };
+
+constructor(props) {
+
+   super(props)
+
+   this.state = {
+
+     TextInput_Student_Name: '',
+     TextInput_Student_Class: '',
+     TextInput_Student_PhoneNumber: '',
+     TextInput_Student_Email: '',
+
+   }
+
+ }
+
+ InsertStudentRecordsToServer = () =>{
+
+      fetch('https://reactnativecode.000webhostapp.com/Student/InsertStudentData.php', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+
+        student_name : this.state.TextInput_Student_Name,
+
+        student_class : this.state.TextInput_Student_Class,
+
+        student_phone_number : this.state.TextInput_Student_PhoneNumber,
+
+        student_email: this.state.TextInput_Student_Email
+
+      })
+
+      }).then((response) => response.json())
+          .then((responseJson) => {
+
+            // Showing response message coming from server after inserting records.
+            Alert.alert(responseJson);
+
+          }).catch((error) => {
+            console.error(error);
+          });
+
+}
+
+ GoTo_Show_StudentList_Activity_Function = () =>
+  {
+    this.props.navigation.navigate('Second');
+    
+  }
+
+ render() {
+   return (
+
+<View style={styles.MainContainer}>
+
+
+       <Text style={{fontSize: 20, textAlign: 'center', marginBottom: 7}}> Student Registration Form </Text>
+ 
+       <TextInput
+         
+         placeholder="Enter Student Name"
+
+         onChangeText={ TextInputValue => this.setState({ TextInput_Student_Name : TextInputValue }) }
+
+         underlineColorAndroid='transparent'
+
+         style={styles.TextInputStyleClass}
+       />
+
+      <TextInput
+         
+         placeholder="Enter Student Class"
+
+         onChangeText={ TextInputValue => this.setState({ TextInput_Student_Class : TextInputValue }) }
+
+         underlineColorAndroid='transparent'
+
+         style={styles.TextInputStyleClass}
+       />
+
+      <TextInput
+         
+         placeholder="Enter Student Phone Number"
+
+         onChangeText={ TextInputValue => this.setState({ TextInput_Student_PhoneNumber : TextInputValue }) }
+
+         underlineColorAndroid='transparent'
+
+         style={styles.TextInputStyleClass}
+       />
+
+       <TextInput
+
+         placeholder="Enter Student Email"
+
+         onChangeText={ TextInputValue => this.setState({ TextInput_Student_Email : TextInputValue }) }
+
+         underlineColorAndroid='transparent'
+
+         style={styles.TextInputStyleClass}
+       />
+
+      <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.InsertStudentRecordsToServer} >
+
+        <Text style={styles.TextStyle}> INSERT STUDENT RECORD TO SERVER </Text>
+
+      </TouchableOpacity>
+
+      <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.GoTo_Show_StudentList_Activity_Function} >
+
+        <Text style={styles.TextStyle}> SHOW ALL INSERTED STUDENT RECORDS IN LISTVIEW </Text>
+
+      </TouchableOpacity>
+ 
+
+</View>
+           
+   );
+ }
+}
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+class MainActivity extends Component {
+ 
+  static navigationOptions =
+  {
+     title: 'MainActivity',
+  };
+ 
+constructor(props) {
+ 
+   super(props)
+ 
+   this.state = {
+ 
+     TextInput_Student_Name: '',
+     TextInput_Student_Class: '',
+     TextInput_Student_PhoneNumber: '',
+     TextInput_Student_Email: '',
+ 
+   }
+ 
+ }
+ 
+ InsertStudentRecordsToServer = () =>{
+ 
+      fetch('https://reactnativecode.000webhostapp.com/Student/InsertStudentData.php', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+ 
+        student_name : this.state.TextInput_Student_Name,
+ 
+        student_class : this.state.TextInput_Student_Class,
+ 
+        student_phone_number : this.state.TextInput_Student_PhoneNumber,
+ 
+        student_email: this.state.TextInput_Student_Email
+ 
+      })
+ 
+      }).then((response) => response.json())
+          .then((responseJson) => {
+ 
+            // Showing response message coming from server after inserting records.
+            Alert.alert(responseJson);
+ 
+          }).catch((error) => {
+            console.error(error);
+          });
+ 
+}
+ 
+ GoTo_Show_StudentList_Activity_Function = () =>
+  {
+    this.props.navigation.navigate('Second');
+    
+  }
+ 
+ render() {
+   return (
+ 
+<View style={styles.MainContainer}>
+ 
+ 
+       <Text style={{fontSize: 20, textAlign: 'center', marginBottom: 7}}> Student Registration Form </Text>
+ 
+       <TextInput
+         
+         placeholder="Enter Student Name"
+ 
+         onChangeText={ TextInputValue => this.setState({ TextInput_Student_Name : TextInputValue }) }
+ 
+         underlineColorAndroid='transparent'
+ 
+         style={styles.TextInputStyleClass}
+       />
+ 
+      <TextInput
+         
+         placeholder="Enter Student Class"
+ 
+         onChangeText={ TextInputValue => this.setState({ TextInput_Student_Class : TextInputValue }) }
+ 
+         underlineColorAndroid='transparent'
+ 
+         style={styles.TextInputStyleClass}
+       />
+ 
+      <TextInput
+         
+         placeholder="Enter Student Phone Number"
+ 
+         onChangeText={ TextInputValue => this.setState({ TextInput_Student_PhoneNumber : TextInputValue }) }
+ 
+         underlineColorAndroid='transparent'
+ 
+         style={styles.TextInputStyleClass}
+       />
+ 
+       <TextInput
+ 
+         placeholder="Enter Student Email"
+ 
+         onChangeText={ TextInputValue => this.setState({ TextInput_Student_Email : TextInputValue }) }
+ 
+         underlineColorAndroid='transparent'
+ 
+         style={styles.TextInputStyleClass}
+       />
+ 
+      <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.InsertStudentRecordsToServer} >
+ 
+        <Text style={styles.TextStyle}> INSERT STUDENT RECORD TO SERVER </Text>
+ 
+      </TouchableOpacity>
+ 
+      <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.GoTo_Show_StudentList_Activity_Function} >
+ 
+        <Text style={styles.TextStyle}> SHOW ALL INSERTED STUDENT RECORDS IN LISTVIEW </Text>
+ 
+      </TouchableOpacity>
+ 
+ 
+</View>
+           
+   );
+ }
+}
+Captura de tela de MainActivity:
+
+
+
+9. Crie uma classe nomeada como  ShowStudentListActivity . Essa classe exibia todos os registros de alunos inseridos no ListView .
+
+Construtor () : Estamos criando um estado de tipo booleano chamado  isLoading . Este estado é usado para mostrar e ocultar o ActivityIndicator depois de carregar dados JSON em ListView. Se o valor isLoading for true, ele mostrará o ActivityIndicator e, se o valor isLoading for false, ele ocultará o ActivityIndicator.
+
+navigationOptions : Usado para definir o título da atividade exibido dentro da barra de ação do título.
+
+componentDidMount () : Esta é uma função interna do React Native. Essa função chama automaticamente o tempo de inicialização da atividade. Escreveríamos o código da Web Fetch () dentro do método componentDidMount () para que, quando a atividade for aberta, ele inicie uma chamada da Web e recupere os dados JSON do servidor e a exibição em ListView. Estamos exibindo apenas nomes de alunos dentro deste ListView.
+
+GetStudentIDFunction () : Esta função é muito importante para esta classe porque nesta função nós enviamos os endereços student_id, student_name, student_class, student_phone_number e student_email para o próximo evento EditStudentRecordActivity on ListView item onPress. Quando usar cliques em qualquer item ListView, ele automaticamente obterá todos os valores do registro selecionado atual e navegará para a próxima atividade, onde será automaticamente recebido e preenchido em TextInput.
+
+ListViewItemSeparator () : essa função processaria uma linha separadora entre cada item de ListView.
+
+
+class ShowStudentListActivity extends Component {
+
+  constructor(props) { 
+
+    super(props);
+
+    this.state = {
+
+      isLoading: true
+
+    }
+  }
+
+  static navigationOptions =
+  {
+     title: 'ShowStudentListActivity',
+  };
+
+  componentDidMount() {
+    
+       return fetch('https://reactnativecode.000webhostapp.com/Student/ShowAllStudentsList.php')
+         .then((response) => response.json())
+         .then((responseJson) => {
+           let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+           this.setState({
+             isLoading: false,
+             dataSource: ds.cloneWithRows(responseJson),
+           }, function() {
+             // In this block you can do something with new state.
+           });
+         })
+         .catch((error) => {
+           console.error(error);
+         });
+     }
+    
+     GetStudentIDFunction=(student_id,student_name, student_class, student_phone_number, student_email)=>{
+
+          this.props.navigation.navigate('Third', { 
+
+            ID : student_id,
+            NAME : student_name,
+            CLASS : student_class,
+            PHONE_NUMBER : student_phone_number,
+            EMAIL : student_email
+
+          });
+
+     }
+
+     ListViewItemSeparator = () => {
+       return (
+         <View
+           style={{
+             height: .5,
+             width: "100%",
+             backgroundColor: "#000",
+           }}
+         />
+       );
+     }
+
+     render() {
+      if (this.state.isLoading) {
+        return (
+          <View style={{flex: 1, paddingTop: 20}}>
+            <ActivityIndicator />
+          </View>
+        );
+      }
+   
+      return (
+   
+        <View style={styles.MainContainer_For_Show_StudentList_Activity}>
+   
+          <ListView
+   
+            dataSource={this.state.dataSource}
+   
+            renderSeparator= {this.ListViewItemSeparator}
+   
+            renderRow={ (rowData) => <Text style={styles.rowViewContainer} 
+
+                      onPress={this.GetStudentIDFunction.bind(
+                        this, rowData.student_id,
+                         rowData.student_name, 
+                         rowData.student_class, 
+                         rowData.student_phone_number, 
+                         rowData.student_email
+                         )} > 
+
+                      {rowData.student_name} 
+                      
+                      </Text> }
+   
+          />
+   
+        </View>
+      );
+    }
+
+}
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+class ShowStudentListActivity extends Component {
+ 
+  constructor(props) { 
+ 
+    super(props);
+ 
+    this.state = {
+ 
+      isLoading: true
+ 
+    }
+  }
+ 
+  static navigationOptions =
+  {
+     title: 'ShowStudentListActivity',
+  };
+ 
+  componentDidMount() {
+    
+       return fetch('https://reactnativecode.000webhostapp.com/Student/ShowAllStudentsList.php')
+         .then((response) => response.json())
+         .then((responseJson) => {
+           let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+           this.setState({
+             isLoading: false,
+             dataSource: ds.cloneWithRows(responseJson),
+           }, function() {
+             // In this block you can do something with new state.
+           });
+         })
+         .catch((error) => {
+           console.error(error);
+         });
+     }
+    
+     GetStudentIDFunction=(student_id,student_name, student_class, student_phone_number, student_email)=>{
+ 
+          this.props.navigation.navigate('Third', { 
+ 
+            ID : student_id,
+            NAME : student_name,
+            CLASS : student_class,
+            PHONE_NUMBER : student_phone_number,
+            EMAIL : student_email
+ 
+          });
+ 
+     }
+ 
+     ListViewItemSeparator = () => {
+       return (
+         <View
+           style={{
+             height: .5,
+             width: "100%",
+             backgroundColor: "#000",
+           }}
+         />
+       );
+     }
+ 
+     render() {
+      if (this.state.isLoading) {
+        return (
+          <View style={{flex: 1, paddingTop: 20}}>
+            <ActivityIndicator />
+          </View>
+        );
+      }
+   
+      return (
+   
+        <View style={styles.MainContainer_For_Show_StudentList_Activity}>
+   
+          <ListView
+   
+            dataSource={this.state.dataSource}
+   
+            renderSeparator= {this.ListViewItemSeparator}
+   
+            renderRow={ (rowData) => <Text style={styles.rowViewContainer} 
+ 
+                      onPress={this.GetStudentIDFunction.bind(
+                        this, rowData.student_id,
+                         rowData.student_name, 
+                         rowData.student_class, 
+                         rowData.student_phone_number, 
+                         rowData.student_email
+                         )} > 
+ 
+                      {rowData.student_name} 
+                      
+                      </Text> }
+   
+          />
+   
+        </View>
+      );
+    }
+ 
+}
+Captura de tela de ShowStudentListActivity:
+
+10. Crie uma classe denominada como  EditStudentRecordActivity . Esta classe é usada para editar o registro aberto atual no banco de dados MySQL. Essa classe também é usada para excluir o registro aberto atual selecionado.
+
+Construtor:  Nós criamos 5 estados nomeados como TextInput_Student_ID, TextInput_Student_Name, TextInput_Student_Class, TextInput_Student_PhoneNumber, TextInput_Student_Email no construtor (). Cada estado é usado para armazenar e manter os dados já enviados da atividade anterior.
+
+componentDidMount () : Armazenando todo o valor enviado da atividade anterior para o estado usando this.props.navigation.state.params.
+
+navigationOptions: A configuração do título da atividade é exibida dentro da barra de ação do título.
+
+UpdateStudentRecord () : Esta função deve obter o valor inserido de TextInput e enviá-los ao servidor usando a API fetch (), onde eles atualizarão o registro existente usando o ID.
+
+DeleteStudentRecord () : Esta função obteria o único ID de estudante de TextInput_Student_ID e enviaria o único TextInput_Student_ID para o servidor. No servidor, excluiríamos o registro atual de acordo com o ID.
+
+
+class EditStudentRecordActivity extends Component {
+  
+  constructor(props) {
+    
+       super(props)
+    
+       this.state = {
+    
+         TextInput_Student_ID: '',
+         TextInput_Student_Name: '',
+         TextInput_Student_Class: '',
+         TextInput_Student_PhoneNumber: '',
+         TextInput_Student_Email: '',
+    
+       }
+    
+     }
+
+     componentDidMount(){
+
+      // Received Student Details Sent From Previous Activity and Set Into State.
+      this.setState({ 
+        TextInput_Student_ID : this.props.navigation.state.params.ID,
+        TextInput_Student_Name: this.props.navigation.state.params.NAME,
+        TextInput_Student_Class: this.props.navigation.state.params.CLASS,
+        TextInput_Student_PhoneNumber: this.props.navigation.state.params.PHONE_NUMBER,
+        TextInput_Student_Email: this.props.navigation.state.params.EMAIL,
+      })
+
+     }
+  
+    static navigationOptions =
+    {
+       title: 'EditStudentRecordActivity',
+    };
+
+    UpdateStudentRecord = () =>{
+      
+            fetch('https://reactnativecode.000webhostapp.com/Student/UpdateStudentRecord.php', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+      
+              student_id : this.state.TextInput_Student_ID,
+
+              student_name : this.state.TextInput_Student_Name,
+      
+              student_class : this.state.TextInput_Student_Class,
+      
+              student_phone_number : this.state.TextInput_Student_PhoneNumber,
+      
+              student_email: this.state.TextInput_Student_Email
+      
+            })
+      
+            }).then((response) => response.json())
+                .then((responseJson) => {
+      
+                  // Showing response message coming from server updating records.
+                  Alert.alert(responseJson);
+      
+                }).catch((error) => {
+                  console.error(error);
+                });
+      
+      }
+
+
+    DeleteStudentRecord = () =>{
+        
+          fetch('https://reactnativecode.000webhostapp.com/Student/DeleteStudentRecord.php', {
+          method: 'POST',
+          headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+        
+            student_id : this.state.TextInput_Student_ID
+        
+          })
+        
+          }).then((response) => response.json())
+          .then((responseJson) => {
+        
+            // Showing response message coming from server after inserting records.
+            Alert.alert(responseJson);
+        
+          }).catch((error) => {
+             console.error(error);
+          });
+
+          this.props.navigation.navigate('First');
+
+      }
+
+    render() {
+
+      return (
+   
+   <View style={styles.MainContainer}>
+   
+          <Text style={{fontSize: 20, textAlign: 'center', marginBottom: 7}}> Edit Student Record Form </Text>
+    
+          <TextInput
+            
+            placeholder="Student Name Shows Here"
+            
+            value={this.state.TextInput_Student_Name}
+   
+            onChangeText={ TextInputValue => this.setState({ TextInput_Student_Name : TextInputValue }) }
+   
+            underlineColorAndroid='transparent'
+   
+            style={styles.TextInputStyleClass}
+          />
+   
+         <TextInput
+            
+            placeholder="Student Class Shows Here"
+
+            value={this.state.TextInput_Student_Class}
+   
+            onChangeText={ TextInputValue => this.setState({ TextInput_Student_Class : TextInputValue }) }
+   
+            underlineColorAndroid='transparent'
+   
+            style={styles.TextInputStyleClass}
+          />
+   
+         <TextInput
+            
+            placeholder="Student Phone Number Shows Here"
+
+            value={this.state.TextInput_Student_PhoneNumber}
+   
+            onChangeText={ TextInputValue => this.setState({ TextInput_Student_PhoneNumber : TextInputValue }) }
+   
+            underlineColorAndroid='transparent'
+   
+            style={styles.TextInputStyleClass}
+          />
+   
+          <TextInput
+   
+            placeholder="Student Email Shows Here"
+
+            value={this.state.TextInput_Student_Email}
+   
+            onChangeText={ TextInputValue => this.setState({ TextInput_Student_Email : TextInputValue }) }
+   
+            underlineColorAndroid='transparent'
+   
+            style={styles.TextInputStyleClass}
+          />
+   
+         <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.UpdateStudentRecord} >
+   
+            <Text style={styles.TextStyle}> UPDATE STUDENT RECORD </Text>
+   
+         </TouchableOpacity>
+   
+         <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.DeleteStudentRecord} >
+   
+            <Text style={styles.TextStyle}> DELETE CURRENT RECORD </Text>
+   
+         </TouchableOpacity>
+    
+   
+   </View>
+              
+      );
+    }
+
+}
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+class EditStudentRecordActivity extends Component {
+  
+  constructor(props) {
+    
+       super(props)
+    
+       this.state = {
+    
+         TextInput_Student_ID: '',
+         TextInput_Student_Name: '',
+         TextInput_Student_Class: '',
+         TextInput_Student_PhoneNumber: '',
+         TextInput_Student_Email: '',
+    
+       }
+    
+     }
+ 
+     componentDidMount(){
+ 
+      // Received Student Details Sent From Previous Activity and Set Into State.
+      this.setState({ 
+        TextInput_Student_ID : this.props.navigation.state.params.ID,
+        TextInput_Student_Name: this.props.navigation.state.params.NAME,
+        TextInput_Student_Class: this.props.navigation.state.params.CLASS,
+        TextInput_Student_PhoneNumber: this.props.navigation.state.params.PHONE_NUMBER,
+        TextInput_Student_Email: this.props.navigation.state.params.EMAIL,
+      })
+ 
+     }
+  
+    static navigationOptions =
+    {
+       title: 'EditStudentRecordActivity',
+    };
+ 
+    UpdateStudentRecord = () =>{
+      
+            fetch('https://reactnativecode.000webhostapp.com/Student/UpdateStudentRecord.php', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+      
+              student_id : this.state.TextInput_Student_ID,
+ 
+              student_name : this.state.TextInput_Student_Name,
+      
+              student_class : this.state.TextInput_Student_Class,
+      
+              student_phone_number : this.state.TextInput_Student_PhoneNumber,
+      
+              student_email: this.state.TextInput_Student_Email
+      
+            })
+      
+            }).then((response) => response.json())
+                .then((responseJson) => {
+      
+                  // Showing response message coming from server updating records.
+                  Alert.alert(responseJson);
+      
+                }).catch((error) => {
+                  console.error(error);
+                });
+      
+      }
+ 
+ 
+    DeleteStudentRecord = () =>{
+        
+          fetch('https://reactnativecode.000webhostapp.com/Student/DeleteStudentRecord.php', {
+          method: 'POST',
+          headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+        
+            student_id : this.state.TextInput_Student_ID
+        
+          })
+        
+          }).then((response) => response.json())
+          .then((responseJson) => {
+        
+            // Showing response message coming from server after inserting records.
+            Alert.alert(responseJson);
+        
+          }).catch((error) => {
+             console.error(error);
+          });
+ 
+          this.props.navigation.navigate('First');
+ 
+      }
+ 
+    render() {
+ 
+      return (
+   
+   <View style={styles.MainContainer}>
+   
+          <Text style={{fontSize: 20, textAlign: 'center', marginBottom: 7}}> Edit Student Record Form </Text>
+    
+          <TextInput
+            
+            placeholder="Student Name Shows Here"
+            
+            value={this.state.TextInput_Student_Name}
+   
+            onChangeText={ TextInputValue => this.setState({ TextInput_Student_Name : TextInputValue }) }
+   
+            underlineColorAndroid='transparent'
+   
+            style={styles.TextInputStyleClass}
+          />
+   
+         <TextInput
+            
+            placeholder="Student Class Shows Here"
+ 
+            value={this.state.TextInput_Student_Class}
+   
+            onChangeText={ TextInputValue => this.setState({ TextInput_Student_Class : TextInputValue }) }
+   
+            underlineColorAndroid='transparent'
+   
+            style={styles.TextInputStyleClass}
+          />
+   
+         <TextInput
+            
+            placeholder="Student Phone Number Shows Here"
+ 
+            value={this.state.TextInput_Student_PhoneNumber}
+   
+            onChangeText={ TextInputValue => this.setState({ TextInput_Student_PhoneNumber : TextInputValue }) }
+   
+            underlineColorAndroid='transparent'
+   
+            style={styles.TextInputStyleClass}
+          />
+   
+          <TextInput
+   
+            placeholder="Student Email Shows Here"
+ 
+            value={this.state.TextInput_Student_Email}
+   
+            onChangeText={ TextInputValue => this.setState({ TextInput_Student_Email : TextInputValue }) }
+   
+            underlineColorAndroid='transparent'
+   
+            style={styles.TextInputStyleClass}
+          />
+   
+         <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.UpdateStudentRecord} >
+   
+            <Text style={styles.TextStyle}> UPDATE STUDENT RECORD </Text>
+   
+         </TouchableOpacity>
+   
+         <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.DeleteStudentRecord} >
+   
+            <Text style={styles.TextStyle}> DELETE CURRENT RECORD </Text>
+   
+         </TouchableOpacity>
+    
+   
+   </View>
+              
+      );
+    }
+ 
+}
+11. Crie o  StackNavigator e defina todas as suas classes de atividades dentro dele.
+
+
+export default MyNewProject = StackNavigator(
+
+  {
+
+    First: { screen: MainActivity },
+
+    Second: { screen: ShowStudentListActivity },
+
+    Third: { screen: EditStudentRecordActivity }
+
+  });
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+export default MyNewProject = StackNavigator(
+ 
+  {
+ 
+    First: { screen: MainActivity },
+ 
+    Second: { screen: ShowStudentListActivity },
+ 
+    Third: { screen: EditStudentRecordActivity }
+ 
+  });
+12. Crie classes de estilo CSS para todas as atividades.
+
+
+const styles = StyleSheet.create({
+
+  MainContainer :{
+
+    alignItems: 'center',
+    flex:1,
+    paddingTop: 30,
+    backgroundColor: '#fff'
+
+  },
+
+  MainContainer_For_Show_StudentList_Activity :{
+    
+    flex:1,
+    paddingTop: (Platform.OS == 'ios') ? 20 : 0,
+    marginLeft: 5,
+    marginRight: 5
+    
+    },
+
+  TextInputStyleClass: {
+
+  textAlign: 'center',
+  width: '90%',
+  marginBottom: 7,
+  height: 40,
+  borderWidth: 1,
+  borderColor: '#FF5722',
+  borderRadius: 5 ,
+
+  },
+
+  TouchableOpacityStyle: {
+
+    paddingTop:10,
+    paddingBottom:10,
+    borderRadius:5,
+    marginBottom:7,
+    width: '90%',
+    backgroundColor: '#00BCD4'
+
+  },
+
+  TextStyle:{
+    color:'#fff',
+    textAlign:'center',
+  },
+
+  rowViewContainer: {
+    fontSize: 20,
+    paddingRight: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
+  }
+
+});
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+const styles = StyleSheet.create({
+ 
+  MainContainer :{
+ 
+    alignItems: 'center',
+    flex:1,
+    paddingTop: 30,
+    backgroundColor: '#fff'
+ 
+  },
+ 
+  MainContainer_For_Show_StudentList_Activity :{
+    
+    flex:1,
+    paddingTop: (Platform.OS == 'ios') ? 20 : 0,
+    marginLeft: 5,
+    marginRight: 5
+    
+    },
+ 
+  TextInputStyleClass: {
+ 
+  textAlign: 'center',
+  width: '90%',
+  marginBottom: 7,
+  height: 40,
+  borderWidth: 1,
+  borderColor: '#FF5722',
+  borderRadius: 5 ,
+ 
+  },
+ 
+  TouchableOpacityStyle: {
+ 
+    paddingTop:10,
+    paddingBottom:10,
+    borderRadius:5,
+    marginBottom:7,
+    width: '90%',
+    backgroundColor: '#00BCD4'
+ 
+  },
+ 
+  TextStyle:{
+    color:'#fff',
+    textAlign:'center',
+  },
+ 
+  rowViewContainer: {
+    fontSize: 20,
+    paddingRight: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
+  }
+ 
+});
+13. Código fonte completo para o   arquivo App.js :
+
+
+import React, { Component } from 'react';
+
+import { StyleSheet, View, Alert, TextInput, Button, Text, Platform, TouchableOpacity, ListView, ActivityIndicator } from 'react-native';
+
+import { StackNavigator } from 'react-navigation';
+
+class MainActivity extends Component {
+
+  static navigationOptions =
+  {
+     title: 'MainActivity',
+  };
+
+constructor(props) {
+
+   super(props)
+
+   this.state = {
+
+     TextInput_Student_Name: '',
+     TextInput_Student_Class: '',
+     TextInput_Student_PhoneNumber: '',
+     TextInput_Student_Email: '',
+
+   }
+
+ }
+
+ InsertStudentRecordsToServer = () =>{
+
+      fetch('https://reactnativecode.000webhostapp.com/Student/InsertStudentData.php', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+
+        student_name : this.state.TextInput_Student_Name,
+
+        student_class : this.state.TextInput_Student_Class,
+
+        student_phone_number : this.state.TextInput_Student_PhoneNumber,
+
+        student_email: this.state.TextInput_Student_Email
+
+      })
+
+      }).then((response) => response.json())
+          .then((responseJson) => {
+
+            // Showing response message coming from server after inserting records.
+            Alert.alert(responseJson);
+
+          }).catch((error) => {
+            console.error(error);
+          });
+
+}
+
+ GoTo_Show_StudentList_Activity_Function = () =>
+  {
+    this.props.navigation.navigate('Second');
+    
+  }
+
+ render() {
+   return (
+
+<View style={styles.MainContainer}>
+
+
+       <Text style={{fontSize: 20, textAlign: 'center', marginBottom: 7}}> Student Registration Form </Text>
+ 
+       <TextInput
+         
+         placeholder="Enter Student Name"
+
+         onChangeText={ TextInputValue => this.setState({ TextInput_Student_Name : TextInputValue }) }
+
+         underlineColorAndroid='transparent'
+
+         style={styles.TextInputStyleClass}
+       />
+
+      <TextInput
+         
+         placeholder="Enter Student Class"
+
+         onChangeText={ TextInputValue => this.setState({ TextInput_Student_Class : TextInputValue }) }
+
+         underlineColorAndroid='transparent'
+
+         style={styles.TextInputStyleClass}
+       />
+
+      <TextInput
+         
+         placeholder="Enter Student Phone Number"
+
+         onChangeText={ TextInputValue => this.setState({ TextInput_Student_PhoneNumber : TextInputValue }) }
+
+         underlineColorAndroid='transparent'
+
+         style={styles.TextInputStyleClass}
+       />
+
+       <TextInput
+
+         placeholder="Enter Student Email"
+
+         onChangeText={ TextInputValue => this.setState({ TextInput_Student_Email : TextInputValue }) }
+
+         underlineColorAndroid='transparent'
+
+         style={styles.TextInputStyleClass}
+       />
+
+      <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.InsertStudentRecordsToServer} >
+
+        <Text style={styles.TextStyle}> INSERT STUDENT RECORD TO SERVER </Text>
+
+      </TouchableOpacity>
+
+      <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.GoTo_Show_StudentList_Activity_Function} >
+
+        <Text style={styles.TextStyle}> SHOW ALL INSERTED STUDENT RECORDS IN LISTVIEW </Text>
+
+      </TouchableOpacity>
+ 
+
+</View>
+           
+   );
+ }
+}
+
+class ShowStudentListActivity extends Component {
+
+  constructor(props) { 
+
+    super(props);
+
+    this.state = {
+
+      isLoading: true
+
+    }
+  }
+
+  static navigationOptions =
+  {
+     title: 'ShowStudentListActivity',
+  };
+
+  componentDidMount() {
+    
+       return fetch('https://reactnativecode.000webhostapp.com/Student/ShowAllStudentsList.php')
+         .then((response) => response.json())
+         .then((responseJson) => {
+           let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+           this.setState({
+             isLoading: false,
+             dataSource: ds.cloneWithRows(responseJson),
+           }, function() {
+             // In this block you can do something with new state.
+           });
+         })
+         .catch((error) => {
+           console.error(error);
+         });
+     }
+    
+     GetStudentIDFunction=(student_id,student_name, student_class, student_phone_number, student_email)=>{
+
+          this.props.navigation.navigate('Third', { 
+
+            ID : student_id,
+            NAME : student_name,
+            CLASS : student_class,
+            PHONE_NUMBER : student_phone_number,
+            EMAIL : student_email
+
+          });
+
+     }
+
+     ListViewItemSeparator = () => {
+       return (
+         <View
+           style={{
+             height: .5,
+             width: "100%",
+             backgroundColor: "#000",
+           }}
+         />
+       );
+     }
+
+     render() {
+      if (this.state.isLoading) {
+        return (
+          <View style={{flex: 1, paddingTop: 20}}>
+            <ActivityIndicator />
+          </View>
+        );
+      }
+   
+      return (
+   
+        <View style={styles.MainContainer_For_Show_StudentList_Activity}>
+   
+          <ListView
+   
+            dataSource={this.state.dataSource}
+   
+            renderSeparator= {this.ListViewItemSeparator}
+   
+            renderRow={ (rowData) => <Text style={styles.rowViewContainer} 
+
+                      onPress={this.GetStudentIDFunction.bind(
+                        this, rowData.student_id,
+                         rowData.student_name, 
+                         rowData.student_class, 
+                         rowData.student_phone_number, 
+                         rowData.student_email
+                         )} > 
+
+                      {rowData.student_name} 
+                      
+                      </Text> }
+   
+          />
+   
+        </View>
+      );
+    }
+
+}
+
+class EditStudentRecordActivity extends Component {
+  
+  constructor(props) {
+    
+       super(props)
+    
+       this.state = {
+    
+         TextInput_Student_ID: '',
+         TextInput_Student_Name: '',
+         TextInput_Student_Class: '',
+         TextInput_Student_PhoneNumber: '',
+         TextInput_Student_Email: '',
+    
+       }
+    
+     }
+
+     componentDidMount(){
+
+      // Received Student Details Sent From Previous Activity and Set Into State.
+      this.setState({ 
+        TextInput_Student_ID : this.props.navigation.state.params.ID,
+        TextInput_Student_Name: this.props.navigation.state.params.NAME,
+        TextInput_Student_Class: this.props.navigation.state.params.CLASS,
+        TextInput_Student_PhoneNumber: this.props.navigation.state.params.PHONE_NUMBER,
+        TextInput_Student_Email: this.props.navigation.state.params.EMAIL,
+      })
+
+     }
+  
+    static navigationOptions =
+    {
+       title: 'EditStudentRecordActivity',
+    };
+
+    UpdateStudentRecord = () =>{
+      
+            fetch('https://reactnativecode.000webhostapp.com/Student/UpdateStudentRecord.php', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+      
+              student_id : this.state.TextInput_Student_ID,
+
+              student_name : this.state.TextInput_Student_Name,
+      
+              student_class : this.state.TextInput_Student_Class,
+      
+              student_phone_number : this.state.TextInput_Student_PhoneNumber,
+      
+              student_email: this.state.TextInput_Student_Email
+      
+            })
+      
+            }).then((response) => response.json())
+                .then((responseJson) => {
+      
+                  // Showing response message coming from server updating records.
+                  Alert.alert(responseJson);
+      
+                }).catch((error) => {
+                  console.error(error);
+                });
+      
+      }
+
+
+    DeleteStudentRecord = () =>{
+        
+          fetch('https://reactnativecode.000webhostapp.com/Student/DeleteStudentRecord.php', {
+          method: 'POST',
+          headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+        
+            student_id : this.state.TextInput_Student_ID
+        
+          })
+        
+          }).then((response) => response.json())
+          .then((responseJson) => {
+        
+            // Showing response message coming from server after inserting records.
+            Alert.alert(responseJson);
+        
+          }).catch((error) => {
+             console.error(error);
+          });
+
+          this.props.navigation.navigate('First');
+
+      }
+
+    render() {
+
+      return (
+   
+   <View style={styles.MainContainer}>
+   
+          <Text style={{fontSize: 20, textAlign: 'center', marginBottom: 7}}> Edit Student Record Form </Text>
+    
+          <TextInput
+            
+            placeholder="Student Name Shows Here"
+            
+            value={this.state.TextInput_Student_Name}
+   
+            onChangeText={ TextInputValue => this.setState({ TextInput_Student_Name : TextInputValue }) }
+   
+            underlineColorAndroid='transparent'
+   
+            style={styles.TextInputStyleClass}
+          />
+   
+         <TextInput
+            
+            placeholder="Student Class Shows Here"
+
+            value={this.state.TextInput_Student_Class}
+   
+            onChangeText={ TextInputValue => this.setState({ TextInput_Student_Class : TextInputValue }) }
+   
+            underlineColorAndroid='transparent'
+   
+            style={styles.TextInputStyleClass}
+          />
+   
+         <TextInput
+            
+            placeholder="Student Phone Number Shows Here"
+
+            value={this.state.TextInput_Student_PhoneNumber}
+   
+            onChangeText={ TextInputValue => this.setState({ TextInput_Student_PhoneNumber : TextInputValue }) }
+   
+            underlineColorAndroid='transparent'
+   
+            style={styles.TextInputStyleClass}
+          />
+   
+          <TextInput
+   
+            placeholder="Student Email Shows Here"
+
+            value={this.state.TextInput_Student_Email}
+   
+            onChangeText={ TextInputValue => this.setState({ TextInput_Student_Email : TextInputValue }) }
+   
+            underlineColorAndroid='transparent'
+   
+            style={styles.TextInputStyleClass}
+          />
+   
+         <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.UpdateStudentRecord} >
+   
+            <Text style={styles.TextStyle}> UPDATE STUDENT RECORD </Text>
+   
+         </TouchableOpacity>
+   
+         <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.DeleteStudentRecord} >
+   
+            <Text style={styles.TextStyle}> DELETE CURRENT RECORD </Text>
+   
+         </TouchableOpacity>
+    
+   
+   </View>
+              
+      );
+    }
+
+}
+
+export default MyNewProject = StackNavigator(
+
+  {
+
+    First: { screen: MainActivity },
+
+    Second: { screen: ShowStudentListActivity },
+
+    Third: { screen: EditStudentRecordActivity }
+
+  });
+
+const styles = StyleSheet.create({
+
+  MainContainer :{
+
+    alignItems: 'center',
+    flex:1,
+    paddingTop: 30,
+    backgroundColor: '#fff'
+
+  },
+
+  MainContainer_For_Show_StudentList_Activity :{
+    
+    flex:1,
+    paddingTop: (Platform.OS == 'ios') ? 20 : 0,
+    marginLeft: 5,
+    marginRight: 5
+    
+    },
+
+  TextInputStyleClass: {
+
+  textAlign: 'center',
+  width: '90%',
+  marginBottom: 7,
+  height: 40,
+  borderWidth: 1,
+  borderColor: '#FF5722',
+  borderRadius: 5 ,
+
+  },
+
+  TouchableOpacityStyle: {
+
+    paddingTop:10,
+    paddingBottom:10,
+    borderRadius:5,
+    marginBottom:7,
+    width: '90%',
+    backgroundColor: '#00BCD4'
+
+  },
+
+  TextStyle:{
+    color:'#fff',
+    textAlign:'center',
+  },
+
+  rowViewContainer: {
+    fontSize: 20,
+    paddingRight: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
+  }
+
+});
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421
+422
+423
+424
+425
+426
+427
+428
+429
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448
+449
+450
+451
+452
+453
+454
+455
+456
+457
+458
+459
+460
+461
+462
+463
+464
+465
+466
+467
+468
+469
+470
+471
+472
+473
+474
+475
+476
+477
+478
+479
+480
+481
+482
+483
+484
+485
+486
+487
+import React, { Component } from 'react';
+ 
+import { StyleSheet, View, Alert, TextInput, Button, Text, Platform, TouchableOpacity, ListView, ActivityIndicator } from 'react-native';
+ 
+import { StackNavigator } from 'react-navigation';
+ 
+class MainActivity extends Component {
+ 
+  static navigationOptions =
+  {
+     title: 'MainActivity',
+  };
+ 
+constructor(props) {
+ 
+   super(props)
+ 
+   this.state = {
+ 
+     TextInput_Student_Name: '',
+     TextInput_Student_Class: '',
+     TextInput_Student_PhoneNumber: '',
+     TextInput_Student_Email: '',
+ 
+   }
+ 
+ }
+ 
+ InsertStudentRecordsToServer = () =>{
+ 
+      fetch('https://reactnativecode.000webhostapp.com/Student/InsertStudentData.php', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+ 
+        student_name : this.state.TextInput_Student_Name,
+ 
+        student_class : this.state.TextInput_Student_Class,
+ 
+        student_phone_number : this.state.TextInput_Student_PhoneNumber,
+ 
+        student_email: this.state.TextInput_Student_Email
+ 
+      })
+ 
+      }).then((response) => response.json())
+          .then((responseJson) => {
+ 
+            // Showing response message coming from server after inserting records.
+            Alert.alert(responseJson);
+ 
+          }).catch((error) => {
+            console.error(error);
+          });
+ 
+}
+ 
+ GoTo_Show_StudentList_Activity_Function = () =>
+  {
+    this.props.navigation.navigate('Second');
+    
+  }
+ 
+ render() {
+   return (
+ 
+<View style={styles.MainContainer}>
+ 
+ 
+       <Text style={{fontSize: 20, textAlign: 'center', marginBottom: 7}}> Student Registration Form </Text>
+ 
+       <TextInput
+         
+         placeholder="Enter Student Name"
+ 
+         onChangeText={ TextInputValue => this.setState({ TextInput_Student_Name : TextInputValue }) }
+ 
+         underlineColorAndroid='transparent'
+ 
+         style={styles.TextInputStyleClass}
+       />
+ 
+      <TextInput
+         
+         placeholder="Enter Student Class"
+ 
+         onChangeText={ TextInputValue => this.setState({ TextInput_Student_Class : TextInputValue }) }
+ 
+         underlineColorAndroid='transparent'
+ 
+         style={styles.TextInputStyleClass}
+       />
+ 
+      <TextInput
+         
+         placeholder="Enter Student Phone Number"
+ 
+         onChangeText={ TextInputValue => this.setState({ TextInput_Student_PhoneNumber : TextInputValue }) }
+ 
+         underlineColorAndroid='transparent'
+ 
+         style={styles.TextInputStyleClass}
+       />
+ 
+       <TextInput
+ 
+         placeholder="Enter Student Email"
+ 
+         onChangeText={ TextInputValue => this.setState({ TextInput_Student_Email : TextInputValue }) }
+ 
+         underlineColorAndroid='transparent'
+ 
+         style={styles.TextInputStyleClass}
+       />
+ 
+      <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.InsertStudentRecordsToServer} >
+ 
+        <Text style={styles.TextStyle}> INSERT STUDENT RECORD TO SERVER </Text>
+ 
+      </TouchableOpacity>
+ 
+      <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.GoTo_Show_StudentList_Activity_Function} >
+ 
+        <Text style={styles.TextStyle}> SHOW ALL INSERTED STUDENT RECORDS IN LISTVIEW </Text>
+ 
+      </TouchableOpacity>
+ 
+ 
+</View>
+           
+   );
+ }
+}
+ 
+class ShowStudentListActivity extends Component {
+ 
+  constructor(props) { 
+ 
+    super(props);
+ 
+    this.state = {
+ 
+      isLoading: true
+ 
+    }
+  }
+ 
+  static navigationOptions =
+  {
+     title: 'ShowStudentListActivity',
+  };
+ 
+  componentDidMount() {
+    
+       return fetch('https://reactnativecode.000webhostapp.com/Student/ShowAllStudentsList.php')
+         .then((response) => response.json())
+         .then((responseJson) => {
+           let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+           this.setState({
+             isLoading: false,
+             dataSource: ds.cloneWithRows(responseJson),
+           }, function() {
+             // In this block you can do something with new state.
+           });
+         })
+         .catch((error) => {
+           console.error(error);
+         });
+     }
+    
+     GetStudentIDFunction=(student_id,student_name, student_class, student_phone_number, student_email)=>{
+ 
+          this.props.navigation.navigate('Third', { 
+ 
+            ID : student_id,
+            NAME : student_name,
+            CLASS : student_class,
+            PHONE_NUMBER : student_phone_number,
+            EMAIL : student_email
+ 
+          });
+ 
+     }
+ 
+     ListViewItemSeparator = () => {
+       return (
+         <View
+           style={{
+             height: .5,
+             width: "100%",
+             backgroundColor: "#000",
+           }}
+         />
+       );
+     }
+ 
+     render() {
+      if (this.state.isLoading) {
+        return (
+          <View style={{flex: 1, paddingTop: 20}}>
+            <ActivityIndicator />
+          </View>
+        );
+      }
+   
+      return (
+   
+        <View style={styles.MainContainer_For_Show_StudentList_Activity}>
+   
+          <ListView
+   
+            dataSource={this.state.dataSource}
+   
+            renderSeparator= {this.ListViewItemSeparator}
+   
+            renderRow={ (rowData) => <Text style={styles.rowViewContainer} 
+ 
+                      onPress={this.GetStudentIDFunction.bind(
+                        this, rowData.student_id,
+                         rowData.student_name, 
+                         rowData.student_class, 
+                         rowData.student_phone_number, 
+                         rowData.student_email
+                         )} > 
+ 
+                      {rowData.student_name} 
+                      
+                      </Text> }
+   
+          />
+   
+        </View>
+      );
+    }
+ 
+}
+ 
+class EditStudentRecordActivity extends Component {
+  
+  constructor(props) {
+    
+       super(props)
+    
+       this.state = {
+    
+         TextInput_Student_ID: '',
+         TextInput_Student_Name: '',
+         TextInput_Student_Class: '',
+         TextInput_Student_PhoneNumber: '',
+         TextInput_Student_Email: '',
+    
+       }
+    
+     }
+ 
+     componentDidMount(){
+ 
+      // Received Student Details Sent From Previous Activity and Set Into State.
+      this.setState({ 
+        TextInput_Student_ID : this.props.navigation.state.params.ID,
+        TextInput_Student_Name: this.props.navigation.state.params.NAME,
+        TextInput_Student_Class: this.props.navigation.state.params.CLASS,
+        TextInput_Student_PhoneNumber: this.props.navigation.state.params.PHONE_NUMBER,
+        TextInput_Student_Email: this.props.navigation.state.params.EMAIL,
+      })
+ 
+     }
+  
+    static navigationOptions =
+    {
+       title: 'EditStudentRecordActivity',
+    };
+ 
+    UpdateStudentRecord = () =>{
+      
+            fetch('https://reactnativecode.000webhostapp.com/Student/UpdateStudentRecord.php', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+      
+              student_id : this.state.TextInput_Student_ID,
+ 
+              student_name : this.state.TextInput_Student_Name,
+      
+              student_class : this.state.TextInput_Student_Class,
+      
+              student_phone_number : this.state.TextInput_Student_PhoneNumber,
+      
+              student_email: this.state.TextInput_Student_Email
+      
+            })
+      
+            }).then((response) => response.json())
+                .then((responseJson) => {
+      
+                  // Showing response message coming from server updating records.
+                  Alert.alert(responseJson);
+      
+                }).catch((error) => {
+                  console.error(error);
+                });
+      
+      }
+ 
+ 
+    DeleteStudentRecord = () =>{
+        
+          fetch('https://reactnativecode.000webhostapp.com/Student/DeleteStudentRecord.php', {
+          method: 'POST',
+          headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+        
+            student_id : this.state.TextInput_Student_ID
+        
+          })
+        
+          }).then((response) => response.json())
+          .then((responseJson) => {
+        
+            // Showing response message coming from server after inserting records.
+            Alert.alert(responseJson);
+        
+          }).catch((error) => {
+             console.error(error);
+          });
+ 
+          this.props.navigation.navigate('First');
+ 
+      }
+ 
+    render() {
+ 
+      return (
+   
+   <View style={styles.MainContainer}>
+   
+          <Text style={{fontSize: 20, textAlign: 'center', marginBottom: 7}}> Edit Student Record Form </Text>
+    
+          <TextInput
+            
+            placeholder="Student Name Shows Here"
+            
+            value={this.state.TextInput_Student_Name}
+   
+            onChangeText={ TextInputValue => this.setState({ TextInput_Student_Name : TextInputValue }) }
+   
+            underlineColorAndroid='transparent'
+   
+            style={styles.TextInputStyleClass}
+          />
+   
+         <TextInput
+            
+            placeholder="Student Class Shows Here"
+ 
+            value={this.state.TextInput_Student_Class}
+   
+            onChangeText={ TextInputValue => this.setState({ TextInput_Student_Class : TextInputValue }) }
+   
+            underlineColorAndroid='transparent'
+   
+            style={styles.TextInputStyleClass}
+          />
+   
+         <TextInput
+            
+            placeholder="Student Phone Number Shows Here"
+ 
+            value={this.state.TextInput_Student_PhoneNumber}
+   
+            onChangeText={ TextInputValue => this.setState({ TextInput_Student_PhoneNumber : TextInputValue }) }
+   
+            underlineColorAndroid='transparent'
+   
+            style={styles.TextInputStyleClass}
+          />
+   
+          <TextInput
+   
+            placeholder="Student Email Shows Here"
+ 
+            value={this.state.TextInput_Student_Email}
+   
+            onChangeText={ TextInputValue => this.setState({ TextInput_Student_Email : TextInputValue }) }
+   
+            underlineColorAndroid='transparent'
+   
+            style={styles.TextInputStyleClass}
+          />
+   
+         <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.UpdateStudentRecord} >
+   
+            <Text style={styles.TextStyle}> UPDATE STUDENT RECORD </Text>
+   
+         </TouchableOpacity>
+   
+         <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.DeleteStudentRecord} >
+   
+            <Text style={styles.TextStyle}> DELETE CURRENT RECORD </Text>
+   
+         </TouchableOpacity>
+    
+   
+   </View>
+              
+      );
+    }
+ 
+}
+ 
+export default MyNewProject = StackNavigator(
+ 
+  {
+ 
+    First: { screen: MainActivity },
+ 
+    Second: { screen: ShowStudentListActivity },
+ 
+    Third: { screen: EditStudentRecordActivity }
+ 
+  });
+ 
+const styles = StyleSheet.create({
+ 
+  MainContainer :{
+ 
+    alignItems: 'center',
+    flex:1,
+    paddingTop: 30,
+    backgroundColor: '#fff'
+ 
+  },
+ 
+  MainContainer_For_Show_StudentList_Activity :{
+    
+    flex:1,
+    paddingTop: (Platform.OS == 'ios') ? 20 : 0,
+    marginLeft: 5,
+    marginRight: 5
+    
+    },
+ 
+  TextInputStyleClass: {
+ 
+  textAlign: 'center',
+  width: '90%',
+  marginBottom: 7,
+  height: 40,
+  borderWidth: 1,
+  borderColor: '#FF5722',
+  borderRadius: 5 ,
+ 
+  },
+ 
+  TouchableOpacityStyle: {
+ 
+    paddingTop:10,
+    paddingBottom:10,
+    borderRadius:5,
+    marginBottom:7,
+    width: '90%',
+    backgroundColor: '#00BCD4'
+ 
+  },
+ 
+  TextStyle:{
+    color:'#fff',
+    textAlign:'center',
+  },
+ 
+  rowViewContainer: {
+    fontSize: 20,
+    paddingRight: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
+  }
+ 
+});
+Captura de tela no dispositivo Android:
+
+
+ 
+Inserir exibição de atualização Excluir operações CRUD      Captura de tela no dispositivo iOS:
+
+     
