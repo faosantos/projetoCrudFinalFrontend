@@ -2,9 +2,11 @@
 
 import React, { Component } from 'react';
 
-import { StyleSheet, View, Alert, TextInput, Button, Text, Platform, TouchableOpacity, ListView, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Alert, TextInput, Button, Text, Platform, TouchableOpacity, ListView, ActivityIndicator, ImageBackground } from 'react-native';
 
 import { StackNavigator } from 'react-navigation';
+
+
 
 // Criando classe Login Activity.
 class LoginActivity extends Component {
@@ -14,7 +16,8 @@ class LoginActivity extends Component {
    {
       title: 'Login do aluno',
       headerStyle: {
-        backgroundColor: '#f4511e',
+        fontFamily: 'Merriweather-BoldItalic',
+        backgroundColor: 'rgba(198, 40, 40,1.0)',
         fontWeight: 'bold',
       },
    };
@@ -82,11 +85,14 @@ fetch('http://192.168.1.6/ReactPHP/projetoCrudFinalBackend/LoginAluno.php', {
  */
   render() {
     return (
-      //fixa o teclado do celular
+      //parte de configuração da imagem de fundo
 
-<View style={styles.MainContainer}>
- 
-        <Text style={{fontSize: 25, textAlign: 'center', marginBottom: 7, color:'#ecf0f1'}}>Digite seu Login e Senha: </Text>
+ <ImageBackground source={require('./imagens/ima_mario.jpg')}style={styles.container}>
+
+      <View style={styles.tansparenciaConteiner}>
+       
+       {/* parte de layout do formulario */} 
+        <Text style={{fontSize: 25, textAlign: 'center', marginBottom: 7, color:'#130f40', paddingTop: 50,fontFamily:'Muli-Black',}}>Digite seu Login e Senha: </Text>
         <TextInput
 
           //Adicionando dicas na entrada de texto usando o marcador de posição.
@@ -95,7 +101,7 @@ fetch('http://192.168.1.6/ReactPHP/projetoCrudFinalBackend/LoginAluno.php', {
           onChangeText={UserEmail => this.setState({UserEmail})}
  
           // Fazendo o Under line transparente.
-          underlineColorAndroid='transparent'
+         // underlineColorAndroid='transparent'
  
           style={styles.TextInputStyleClass}
         />
@@ -126,8 +132,8 @@ fetch('http://192.168.1.6/ReactPHP/projetoCrudFinalBackend/LoginAluno.php', {
       </TouchableOpacity>
    */}
               
-</View>
-          
+  </View>
+</ImageBackground>   
     );
   }
 } 
@@ -140,7 +146,7 @@ class MainActivity extends Component {
      title: 'Tela inicial',
      
      headerStyle: {
-      backgroundColor: '#f4511e',
+      backgroundColor: 'rgba(198, 40, 40,1.0)',
       fontWeight: 'bold',
     },
     
@@ -204,7 +210,7 @@ static navigationOptions =
    title: 'Cadastro do Aluno',
 
    headerStyle: {
-    backgroundColor: '#f4511e',
+    backgroundColor: 'rgba(198, 40, 40,1.0)',
     fontWeight: 'bold',
   },
  
@@ -225,10 +231,12 @@ static navigationOptions =
   const {goBack} = this.props.navigation;
    return (
      // parte referente ao layout da primeira tela.
-<View style={styles.MainContainer}> 
+<ImageBackground source={require('./imagens/ima_mario.jpg')}style={styles.container}>
 
+<View style={styles.tansparenciaConteiner}>
 
-       <Text style={{fontSize: 25, textAlign: 'center', marginBottom: 7, color:'#ecf0f1'}}> Registro do estudante </Text>
+         {/* parte de layout do formulario */} 
+    <Text style={{fontSize: 25, textAlign: 'center', marginBottom: 7, color:'#130f40', paddingTop: 50,}}> Registro do estudante: </Text>
  
        <TextInput
          
@@ -306,8 +314,8 @@ static navigationOptions =
             <Text style={styles.TextStyle}>Clique aqui para sair do Sistema </Text>
       </TouchableOpacity>
 
-</View>
-           
+  </View>
+</ImageBackground>          
    );
  }
 }
@@ -331,7 +339,7 @@ class ListarAlunosActivity extends Component {
      title: 'Lista de alunos cadastrados',
 
      headerStyle: {
-        backgroundColor: '#f4511e',
+        backgroundColor: 'rgba(198, 40, 40,1.0)',
         fontWeight: 'bold',
       },
 
@@ -375,9 +383,9 @@ class ListarAlunosActivity extends Component {
        return (
          <View
            style={{
-             height: .5,
+             height: 5,
              width: "100%",
-             backgroundColor: "#000",
+             backgroundColor: "#00b894",
            }}
          />
        );
@@ -393,6 +401,10 @@ class ListarAlunosActivity extends Component {
       }
    
       return (
+
+<ImageBackground source={require('./imagens/ima_mario2.jpg')}style={styles.container}>
+
+  <View style={styles.tansparenciaConteiner}>
    
         <View style={styles.MainContainer_For_Show_StudentList_Activity}>
    
@@ -420,6 +432,8 @@ class ListarAlunosActivity extends Component {
           />
    
         </View>
+  </View>
+</ImageBackground> 
       );
     }
 
@@ -467,7 +481,7 @@ class EditarAlunoActivity extends Component {
        title: 'Edição de registro',
 
        headerStyle: {
-        backgroundColor: '#f4511e',
+        backgroundColor: 'rgba(198, 40, 40,1.0)',
         fontWeight: 'bold',
       },
     };
@@ -546,9 +560,12 @@ class EditarAlunoActivity extends Component {
       const {goBack} = this.props.navigation;
       return (
      
-   <View style={styles.MainContainer}>
+        <ImageBackground source={require('./imagens/ima_mario.jpg')}style={styles.container}>
+
+        <View style={styles.tansparenciaConteiner}>
    
-          <Text style={{fontSize: 25, textAlign: 'center', marginBottom: 7, color:'#ecf0f1'}}> Editar registro  </Text>
+           {/* parte de layout do formulario */} 
+        <Text style={{fontSize: 25, textAlign: 'center', marginBottom: 7, color:'#130f40', paddingTop: 50,}}> Editar Registro do aluno: </Text>
     
           <TextInput
             
@@ -638,8 +655,8 @@ class EditarAlunoActivity extends Component {
             <Text style={styles.TextStyle}>Clique aqui para voltar a lista </Text>
         </TouchableOpacity>
    
-   </View>
-              
+  </View>
+</ImageBackground>           
       );
     }
 
@@ -661,21 +678,21 @@ export default MyNewProject = StackNavigator(
   });
 
 const styles = StyleSheet.create({
-
-  MainContainer :{
-
-    alignItems: 'center',
-    flex:1,
-    paddingTop: 30,
-    backgroundColor: '#2980b9'
-
-  },
+container: {
+  flex: 1,
+  width: '100%',
+  height:'100%'
+},
+tansparenciaConteiner: {
+  flex: 1,
+  backgroundColor: 'rgba(47,163,218, .4)'
+},
 
   MainContainer_For_Show_StudentList_Activity :{
     
     flex:1,
     paddingTop:  20,
-    marginLeft: 5,
+    marginLeft: 10,
     marginRight: 5
     
     },
@@ -685,9 +702,10 @@ const styles = StyleSheet.create({
   textAlign: 'center',
   width: '90%',
   marginBottom: 7,
+  marginLeft: 10,
   height: 40,
   borderWidth: 1,
-  borderColor: '#FF5722',
+  borderColor: 'rgba(198, 40, 40,1.0)',
   borderRadius: 5 ,
 
   },
@@ -698,6 +716,7 @@ const styles = StyleSheet.create({
     paddingBottom:10,
     borderRadius:5,
     marginBottom:7,
+    marginLeft: 10,
     width: '90%',
     backgroundColor: '#00BCD4'
 
@@ -709,11 +728,11 @@ const styles = StyleSheet.create({
   },
 
   rowViewContainer: {
-    fontSize: 20,
+    fontSize: 23,
     paddingRight: 10,
     paddingTop: 10,
     paddingBottom: 10,
-    color: '#FF5722'
+    color: 'rgba(198, 40, 40,1.0)'
   }
 
 });
