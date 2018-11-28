@@ -92,7 +92,7 @@ fetch('http://192.168.1.6/ReactPHP/projetoCrudFinalBackend/LoginAluno.php', {
       <View style={styles.tansparenciaConteiner}>
        
        {/* parte de layout do formulario */} 
-        <Text style={{fontSize: 25, textAlign: 'center', marginBottom: 7, color:'#130f40', paddingTop: 50,fontFamily:'Muli-Black',}}>Digite seu Login e Senha: </Text>
+        <Text style={{fontSize: 25, textAlign: 'center', marginBottom: 7, color:'#130f40', paddingTop: 50,fontFamily:'Merriweather-Black',}}>Digite seu Login e Senha </Text>
         <TextInput
 
           //Adicionando dicas na entrada de texto usando o marcador de posição.
@@ -236,7 +236,7 @@ static navigationOptions =
 <View style={styles.tansparenciaConteiner}>
 
          {/* parte de layout do formulario */} 
-    <Text style={{fontSize: 25, textAlign: 'center', marginBottom: 7, color:'#130f40', paddingTop: 50,}}> Registro do estudante: </Text>
+    <Text style={{fontSize: 25, textAlign: 'center', marginBottom: 7, color:'#130f40', paddingTop: 50, fontFamily:'Merriweather-Black',}}> Registro do estudante </Text>
  
        <TextInput
          
@@ -565,7 +565,7 @@ class EditarAlunoActivity extends Component {
         <View style={styles.tansparenciaConteiner}>
    
            {/* parte de layout do formulario */} 
-        <Text style={{fontSize: 25, textAlign: 'center', marginBottom: 7, color:'#130f40', paddingTop: 50,}}> Editar Registro do aluno: </Text>
+        <Text style={{fontSize: 25, textAlign: 'center', marginBottom: 7, color:'#130f40', paddingTop: 50, fontFamily:'Merriweather-Black',}}> Editar Registro do aluno </Text>
     
           <TextInput
             
@@ -718,6 +718,7 @@ tansparenciaConteiner: {
     marginBottom:7,
     marginLeft: 10,
     width: '90%',
+    fontFamily:'Poppins-Bold',
     backgroundColor: '#00BCD4'
 
   },
@@ -725,6 +726,7 @@ tansparenciaConteiner: {
   TextStyle:{
     color:'#fff',
     textAlign:'center',
+    fontFamily:'Lora-Bold',
   },
 
   rowViewContainer: {
@@ -732,6 +734,7 @@ tansparenciaConteiner: {
     paddingRight: 10,
     paddingTop: 10,
     paddingBottom: 10,
+    fontFamily:'Lora-Bold',
     color: 'rgba(198, 40, 40,1.0)'
   }
 

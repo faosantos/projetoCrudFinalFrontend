@@ -25,7 +25,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -40,13 +40,10 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
 	<key>NSAppTransportSecurity</key>
-	<!--See http://ste.vn/2015/06/10/configuring-app-transport-security-ios-9-osx-10-11/ -->
 	<dict>
-    <key>NSAllowsArbitraryLoads</key>
-    <true/>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
 			<key>localhost</key>
@@ -56,5 +53,23 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>DancingScript-Bold.ttf</string>
+		<string>Lora-Bold.ttf</string>
+		<string>Lora-Italic.ttf</string>
+		<string>Merriweather-Black.ttf</string>
+		<string>Muli-Black.ttf</string>
+		<string>Muli-Bold.ttf</string>
+		<string>Niramit-Light.ttf</string>
+		<string>Niramit-Medium.ttf</string>
+		<string>PlayfairDisplay-Black.ttf</string>
+		<string>PlayfairDisplay-Bold.ttf</string>
+		<string>Poppins-Black.ttf</string>
+		<string>Poppins-Bold.ttf</string>
+		<string>Poppins-Italic.ttf</string>
+		<string>Poppins-Light.ttf</string>
+		<string>RobotoMono-Thin.ttf</string>
+	</array>
 </dict>
 </plist>
